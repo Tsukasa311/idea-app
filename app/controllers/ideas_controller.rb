@@ -1,15 +1,17 @@
 class IdeasController < ApplicationController
   
   def index
-    if Category.where(name: params[:name]).exists?
-      category_id = Category.where(name: params[:name]).ids
+    if Category.where(name: "aaa").exists?
+      category_id = Category.where(name: params[:category_name]).ids
       ideas = Idea.where(category_id: category_id)
       data = make_array(ideas)
       render json: {data: data}
-    else  
+    elsif params[:category_name].blank?
       ideas = Idea.includes(:category)
       data = make_array(ideas)
       render json: {data: data}
+    else
+      render json: {}, status: 404
     end
   end
 
@@ -26,7 +28,7 @@ class IdeasController < ApplicationController
   private
 
   def category_idea_paramns
-    params.require(:category_idea).permit(:name, :body)
+    params.require(:category_idea).permit(:category_name, :body)
   end
 
   def make_array(ideas)

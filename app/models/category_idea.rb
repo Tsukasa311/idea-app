@@ -3,12 +3,12 @@ class CategoryIdea
   attr_accessor :name, :body
 
   with_options presence: true do
-    validates :name
+    validates :name, unique: true
     validates :body
   end
 
   def save
-    category = Category.where(name: name).first_or_create
+    category = Category.where(name: category_name).first_or_create
     Idea.create(category_id: category.id, body: body)
   end
 end
