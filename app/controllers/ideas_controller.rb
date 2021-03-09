@@ -1,15 +1,14 @@
 class IdeasController < ApplicationController
-  
   def index
-    if Category.where(name: "aaa").exists?
+    if Category.where(name: 'aaa').exists?
       category_id = Category.where(name: params[:category_name]).ids
       ideas = Idea.where(category_id: category_id)
       data = make_array(ideas)
-      render json: {data: data}
+      render json: { data: data }
     elsif params[:category_name].blank?
       ideas = Idea.includes(:category)
       data = make_array(ideas)
-      render json: {data: data}
+      render json: { data: data }
     else
       render json: {}, status: 404
     end
@@ -35,13 +34,12 @@ class IdeasController < ApplicationController
     data_array = []
     ideas.each do |idea|
       data_array <<
-      {
-        id: idea.id,
-        category: idea.category.name,
-        body: idea.body
-      }
+        {
+          id: idea.id,
+          category: idea.category.name,
+          body: idea.body
+        }
     end
     data_array
   end
-
 end
