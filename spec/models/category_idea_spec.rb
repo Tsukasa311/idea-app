@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe CategoryIdea, type: :model do
   before do
-    @idea = FactoryBot.build(:category_idea)
+    @idea = FactoryBot.build(:idea)
+    @category = FactoryBot.build(:category)
   end
 
   context 'アイデアを保存できるとき' do
@@ -13,9 +14,9 @@ RSpec.describe CategoryIdea, type: :model do
 
   context 'アイデアを保存できないとき' do
     it 'リクエストに「カテゴリー」が含まれていないとき' do
-      @idea.name = nil
-      @idea.valid?
-      expect(@idea.errors.full_messages).to include("Name can't be blank")
+      @category.name = nil
+      @category.valid?
+      expect(@category.errors.full_messages).to include("Name can't be blank")
     end
     it 'リクエストに「本文」が含まれていないとき' do
       @idea.body = nil
@@ -23,11 +24,11 @@ RSpec.describe CategoryIdea, type: :model do
       expect(@idea.errors.full_messages).to include("Body can't be blank")
     end
     it '「カテゴリー」に一意性がないとき' do
-      category_1 = FactoryBot.create(:category)
-      category_2 = FactoryBot.build(:category)
-      category_2.name = category_1.name
-      category_2.valid?
-      expect(category_2.errors.full_messages).to include('Name has already been taken')
+      @category.save
+      anoter_category = FactoryBot.build(:category)
+      anoter_category.name = @category.name
+      anoter_category.valid?
+      expect(anoter_category.errors.full_messages).to include('Name has already been taken')
     end
   end
 end
