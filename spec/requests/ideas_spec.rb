@@ -31,18 +31,18 @@ describe IdeasController, type: :request do
   describe 'POST #create' do
     context '保存できるとき' do
       it '既存のカテゴリーでcreateアクションにリクエストすると、Ideaモデルのカウントが１増え、ステータスコード201を返す' do
-        expect do
+        expect {
           params = { category_idea: { category_name: @idea.category.name, body: 'new_body' } }
           post ideas_path(params)
           expect(response.status).to eq(201)
-        end.to change(Idea, :count).by(1).and change(Category, :count).by(0)
+        }.to change(Idea, :count).by(1).and change(Category, :count).by(0)
       end
       it '新規のカテゴリーでcreateアクションにリクエストすると、Ideaモデル、Categoryモデルのカウントがそれぞれ１増え、ステータスコード201を返す' do
-        expect do
+        expect {
           params = { category_idea: { category_name: 'new_category', body: 'new_body' } }
           post ideas_path(params)
           expect(response.status).to eq(201)
-        end.to change(Idea, :count).by(1).and change(Category, :count).by(1)
+        }.to change(Idea, :count).by(1).and change(Category, :count).by(1)
       end
     end
     context '保存できないとき' do
