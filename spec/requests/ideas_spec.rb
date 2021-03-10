@@ -1,8 +1,10 @@
 require 'rails_helper'
+RSpec::Matchers.define_negated_matcher :exclude, :include
 
 describe IdeasController, type: :request do
   before do
     @idea = FactoryBot.create(:idea)
+    @another_idea = FactoryBot.create(:idea)
   end
 
   describe 'GET #index' do
@@ -10,13 +12,12 @@ describe IdeasController, type: :request do
       it 'category_nameを指定してリクエストすると、該当するcategoryのアイデアを返す' do
         params = { category_name: @idea.category.name }
         get ideas_path(params)
-        expect(response.body).to include(@idea.category.name).and include(@idea.body)
+        expect(response.body).to include(@idea.category.name).and exclude(@another_idea.category.name)
       end
       it 'category_nameを指定せずにリクエストすると、全てのアイデアを返す' do
-        another_idea = FactoryBot.create(:idea)
         params = { category_name: nil }
         get ideas_path(params)
-        expect(response.body).to include(@idea.body).and include(another_idea.body)
+        expect(response.body).to include(@idea.body).and include(@another_idea.body)
       end
     end
     context 'アイデアが取得できないとき' do
