@@ -1,7 +1,7 @@
 # categories テーブル
-| Column     | Type     | Option     |
-|------------|----------|------------|
-| name       | string   |null: false |
+| Column     | Type     | Option                    |
+|------------|----------|---------------------------|
+| name       | string   | null: false, unique: true |
 
 ## Association
 category has_many :ideas
