@@ -1,14 +1,17 @@
 class CategoryIdea
   include ActiveModel::Model
-  attr_accessor :name, :body
+  attr_accessor :category_name, :body
 
   with_options presence: true do
-    validates :name, unique: true
+    validates :category_name
     validates :body
   end
 
-  def save
-    category = Category.where(name: category_name).first_or_create
-    Idea.create(category_id: category.id, body: body)
+  def save!
+    ActiveRecord::Base.transaction do
+      category = Category.where(name: category_name).first_or_initialize
+      category.save!
+      Idea.create!(category_id: category.id, body: body)
+    end
   end
 end

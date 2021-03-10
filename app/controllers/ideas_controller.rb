@@ -1,6 +1,6 @@
 class IdeasController < ApplicationController
   def index
-    if Category.where(name: 'aaa').exists?
+    if Category.where(name: params[:category_name]).exists?
       category_id = Category.where(name: params[:category_name]).ids
       ideas = Idea.where(category_id: category_id)
       data = make_array(ideas)
@@ -17,7 +17,7 @@ class IdeasController < ApplicationController
   def create
     category_idea = CategoryIdea.new(category_idea_paramns)
     if category_idea.valid?
-      @category_idea.save
+      category_idea.save!
       render json: {}, status: 201
     else
       render json: {}, status: 422
